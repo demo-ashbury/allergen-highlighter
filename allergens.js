@@ -13,6 +13,7 @@ const ALLERGENS = [
   { name: "Mustard", keywords: ["mustard"] },
   { name: "Tree nuts", keywords: ["almond", "almonds", "hazelnut", "hazelnuts", "walnut", "walnuts", "cashew", "cashews", "pecan", "pecans", "pistachio", "pistachios", "macadamia"] },
   { name: "Peanuts", keywords: ["peanut", "peanuts", "groundnut", "groundnuts"] },
+  { name: "Sesame", keywords: ["sesame", "tahini", "tahina"] },
   { name: "Soya", keywords: ["soya", "soy", "soybean", "soybeans"] },
   { name: "Sulphites", keywords: ["sulphite", "sulphites", "sulphur dioxide", "sulfite", "sulfites"] }
 ];
