@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Allergen Highlighter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #DDE3DA;
+      --label: #FFFFFF;
+      --ink: #1E2420;
+      --muted: #5C665F;
+      --rule: #1E2420;
+      --flag: #B3261E;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      padding: 48px 20px;
+    }
+    main { width: 100%; max-width: 640px; }
+    h1 { font-size: 40px; font-weight: 800; line-height: 1.05; margin: 0 0 8px; letter-spacing: -0.02em; }
+    .intro { color: var(--muted); margin: 0 0 32px; max-width: 52ch; }
+    label { display: block; font-weight: 600; margin-bottom: 8px; }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px;
+      font: inherit;
+      border: 2px solid var(--rule);
+      border-radius: 4px;
+      background: var(--label);
+      resize: vertical;
+    }
+    textarea:focus, button:focus-visible { outline: 3px solid var(--flag); outline-offset: 2px; }
+    button {
+      margin-top: 12px;
+      padding: 12px 22px;
+      font: inherit;
+      font-weight: 600;
+      color: var(--label);
+      background: var(--ink);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .panel {
+      margin-top: 36px;
+      background: var(--label);
+      border: 2px solid var(--rule);
+      padding: 20px 22px;
+    }
+    .panel h2 {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 6px solid var(--rule);
+    }
+    .panel p { margin: 0; }
+    .panel strong { font-weight: 800; }
+    .found { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--rule); color: var(--flag); font-weight: 600; }
+    .empty { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Allergen Highlighter</h1>
+    <p class="intro">Paste an ingredients list and the 14 UK allergens are shown in bold, the way they must appear on pack.</p>
+
+    <label for="ingredients">Ingredients</label>
+    <textarea id="ingredients">Chickpeas (45%), water, sesame seed paste (tahini), rapeseed oil, lemon juice, garlic, salt, preservative (potassium sorbate).</textarea>
+    <button id="check">Check ingredients</button>
+
+    <section class="panel" aria-live="polite">
+      <h2>Ingredients</h2>
+      <p id="output" class="empty">Your checked ingredients will appear here.</p>
+      <p id="found" class="found" hidden></p>
+    </section>
+  </main>
+
+  <script src="allergens.js"></script>
+  <script>
+    const input = document.getElementById("ingredients");
+    const output = document.getElementById("output");
+    const found = document.getElementById("found");
+
+    document.getElementById("check").addEventListener("click", () => {
+      const text = input.value.trim();
+      if (!text) {
+        output.className = "empty";
+        output.textContent = "Paste an ingredients list above, then check it.";
+        found.hidden = true;
+        return;
+      }
+      output.className = "";
+      output.innerHTML = highlightAllergens(text);
+      const allergens = findAllergens(text);
+      found.hidden = false;
+      found.textContent = allergens.length
+        ? "Contains: " + allergens.join(", ")
+        : "No allergens found.";
+    });
+  </script>
+</body>
+</html>
